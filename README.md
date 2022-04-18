@@ -12,7 +12,7 @@
 
  Button : If you are deploying normally
 
-[![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy?template=https://github.com/Issa2001/Beyond)
+[![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy?template=https://github.com/DEVILL-MASCOT/MARIN-KITAGAWA)
 
 Button : If you are deploying from a fork
 
