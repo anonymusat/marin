@@ -1,59 +1,33 @@
+import { MessageType } from '@adiwajshing/baileys'
+import request from '../../lib/request'
 import MessageHandler from '../../Handlers/MessageHandler'
 import BaseCommand from '../../lib/BaseCommand'
 import WAClient from '../../lib/WAClient'
 import { IParsedArgs, ISimplifiedMessage } from '../../typings'
-import akaneko from "akaneko";
-import request from "../../lib/request";
-import { MessageType } from "@adiwajshing/baileys";
-// import { MessageType, Mimetype } from '@adiwajshing/baileys'
-const w5botapi = require('w5-textmaker');
+import axios from 'axios'
 
 export default class Command extends BaseCommand {
-	constructor(client: WAClient, handler: MessageHandler) {
-		super(client, handler, {
-			command: "devil",
-			description: `Get text image`,
-			aliases: ["devil"],
-			category: "Creations",
-			usage: `${client.config.prefix}devil`,
-			baseXp: 50,
-		});
-	}
-
-	run = async (M: ISimplifiedMessage, { joined }: IParsedArgs): Promise<void> => {
-		 if (!joined) return void (await M.reply(`Provide the text, Baka!`))
-        const cara = joined.trim()
-		const wall = await w5botapi.textpro("https://textpro.me/create-neon-devil-wings-text-effect-online-free-1014.html",
-    cara
-    );
-		const buffer = await request.buffer(wall).catch((e) => {
-			return void M.reply(e.message);
-		});
-		while (true) {
-			try {
-				M.reply(
-					buffer || "Could not fetch image. Please try again later",
-					MessageType.image,
-					undefined,
-					undefined,
-					`🌟 Here you go.\n`,
-					undefined
-				).catch((e) => {
-					console.log(
-						`This Error occurs when an image is sent via M.reply()\n Child Catch Block : \n${e}`
-					);
-					// console.log('Failed')
-					M.reply(`Could not fetch image. Here's the URL: ${wall}`);
-				});
-				break;
-			} catch (e) {
-				// console.log('Failed2')
-				M.reply(`Could not fetch image. Here's the URL : ${wall}`);
-				console.log(
-					`This Error occurs when an image is sent via M.reply()\n Parent Catch Block : \n${e}`
-				);
-			}
-		}
-		return void null;
-	};
+    constructor(client: WAClient, handler: MessageHandler) {
+        super(client, handler, {
+        command: "devil",
+	description: `Get text image of PUBG Cover`,
+  	aliases: ["devil"],
+  	category: "Creations",
+	usage: `${client.config.prefix}pubg`,
+	baseXp: 50,
+        })
+    }
+    // static count = 0
+    run = async (M: ISimplifiedMessage, { joined }: IParsedArgs): Promise<void> => {
+        if (!joined) return void (await M.reply(`Give me your name, Baka!`))
+        const chitoge = joined.trim()
+        return void M.reply( await request.buffer(`https://api-xcoders.xyz/api/textpro/devil?text=${chitoge}&apikey=nMLptkNt9s`),
+        MessageType.image,
+                    undefined,
+                    undefined,
+                    `✨ Here you go.\n`,
+                    undefined
+                ).catch((reason: any) =>
+            M.reply(`✖ An error occurred. Please try again later. ${reason}`))
+    }
 }
