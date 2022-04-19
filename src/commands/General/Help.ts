@@ -13,30 +13,33 @@ export default class Command extends BaseCommand {
             description: 'Displays the help menu or shows the info of the command provided',
             category: 'general',
             usage: `${client.config.prefix}help (command_name)`,
-            aliases: ['h','menu']
+            aliases: ['h']
         })
     }
 
-     run = async (M: ISimplifiedMessage, parsedArgs: IParsedArgs): Promise<void> => {
-           const n = [
-            "https://telegra.ph/file/fc8c10666835418136477.mp4",
-            "https://telegra.ph/file/614ba2eb73d658b557b1b.mp4",
- 	          "https://telegra.ph/file/b79a65e4311d5a680c10f.mp4",
-        ]
+    run = async (M: ISimplifiedMessage, parsedArgs: IParsedArgs): Promise<void> => {
+            const n = ["https://telegra.ph/file/e15eddbd05c6383c27820.mp4"]
         let chitoge = n[Math.floor(Math.random() * n.length)]
-        if (!parsedArgs.joined) {
-            const commands = this.handler.commands.keys()
-            const categories: { [key: string]: ICommand[] } = {}
-            for (const command of commands) {
-                const info = this.handler.commands.get(command)
-                if (!command) continue
-                if (!info?.config?.category || info.config.category === 'nsfw') continue
-                if (Object.keys(categories).includes(info.config.category)) categories[info.config.category].push(info)
-                else {
-                    categories[info.config.category] = []
-                    categories[info.config.category].push(info)
-                }
-            }
+	if (!parsedArgs.joined) {
+			const commands = this.handler.commands.keys();
+			const categories: { [key: string]: ICommand[] } = {};
+			for (const command of commands) {
+				const info = this.handler.commands.get(command);
+				if (!command) continue;
+				if (!info?.config?.category || info.config.category === "dev") continue;
+				if (
+					!info?.config?.category ||
+					(info.config.category === "nsfw" &&
+						!(await this.client.getGroupData(M.from)).nsfw)
+				)
+					continue;
+				if (Object.keys(categories).includes(info.config.category))
+					categories[info.config.category].push(info);
+				else {
+					categories[info.config.category] = [];
+					categories[info.config.category].push(info);
+				}
+			}
             let text = `
 ╭─「Kon'nichiwa *${M.sender.username}*'san
 │⋊ I'am:  🎀𝓜𝓐𝓡𝓘𝓝𝓔🎀
@@ -46,23 +49,21 @@ export default class Command extends BaseCommand {
 ╰────────────┈平和                            \n\n`
             const keys = Object.keys(categories)
             for (const key of keys)
-                text += `╚━❰🔥𝙈𝙖𝙧𝙞𝙣 ${this.emojis[keys.indexOf(key)]} ${this.client.util.capitalize(key)}•𖣘❱━╝\n• \`\`\`${categories[
-                    key
-                ]
+                text += `*『 ${this.client.util.capitalize(
+					key
+	         )} 』*\n❐ \`\`\`${categories[key]
                     .map((command) => command.config?.command)
-                     .join(', ')}\`\`\`\n\n`
-            return void this.client.sendMessage(M.from, { url: chitoge }, MessageType.video, {quoted: M.WAMessage,
-
-          mimetype: Mimetype.gif,
-
-
-            caption: `${text}
- ──❅┈[ 🎀𝓜𝓐𝓡𝓘𝓝𝓔🎀]┈❅───
-┌────────────┈𑁍𖣘
-│🎀𝓜𝓐𝓡𝓘𝓝𝓔🎀
-└────────────┈𖣘
+                    .join(', ')}\`\`\`\n\n`
+            return void this.client.sendMessage(M.from, { url: chitoge }, MessageType.video, {quoted:M.WAMessage,
+            mimetype: Mimetype.gif,
+            caption: `${text} 
+ ──❅┈[ 𝒀𝒐𝒕𝒔𝒖𝒃𝒂 𝑩𝒐𝒕 ]┈❅───
+┌────────────┈❅
+│   🎀𝓜𝓐𝓡𝓘𝓝𝓔🎀
+│   ©️ MADED BY AYUSH
+└────────────┈⁂
 ❅┈[𝐇𝐚𝐯𝐞 𝐆𝐫𝐞𝐚𝐭 𝐃𝐚𝐲]┈❅
-📝 *Note: Use ${this.client.config.prefix}help <command_name> to view the command info*` }
+🎗 *Note: Use ${this.client.config.prefix}help <command_name> to view the command info*` }
             )
         }
         const key = parsedArgs.joined.toLowerCase()
@@ -70,7 +71,7 @@ export default class Command extends BaseCommand {
         if (!command) return void M.reply(`No Command of Alias Found | "${key}"`)
         const state = await this.client.DB.disabledcommands.findOne({ command: command.config.command })
         M.reply(
-            `🚀 *Command:* ${this.client.util.capitalize(command.config?.command)}\n📉 *Status:* ${
+            `🎈 *Command:* ${this.client.util.capitalize(command.config?.command)}\n📉 *Status:* ${
                 state ? 'Disabled' : 'Available'
             }\n⛩ *Category:* ${this.client.util.capitalize(command.config?.category || '')}${
                 command.config.aliases
@@ -81,6 +82,4 @@ export default class Command extends BaseCommand {
             )}\n💎 *Usage:* ${command.config?.usage || ''}\n\n📒 *Description:* ${command.config?.description || ''}`
         )
     }
-
-    emojis = ['', '', '','', '', '', '', '', '', '', '', '']
 }
