@@ -4,7 +4,6 @@ import WAClient from '../../lib/WAClient'
 import { ICommand, IParsedArgs, ISimplifiedMessage } from '../../typings'
 import { MessageType, Mimetype } from '@adiwajshing/baileys'
 import request from '../../lib/request'
-const fs require("fs")
 
 
 export default class Command extends BaseCommand {
@@ -14,12 +13,12 @@ export default class Command extends BaseCommand {
             description: 'Displays the help menu or shows the info of the command provided',
             category: 'general',
             usage: `${client.config.prefix}help2 (command_name)`,
-            aliases: ['h2'],
+            aliases: ['h2']
         })
     }
 
     run = async (M: ISimplifiedMessage, parsedArgs: IParsedArgs): Promise<void> => {
-            const n = fs.readFileSync("../assets/AYUSH.mp3")
+            const n = ['./assets/AYUSH.mp3']
         let chitoge = n[Math.floor(Math.random() * n.length)]
 	if (!parsedArgs.joined) {
 			const commands = this.handler.commands.keys();
