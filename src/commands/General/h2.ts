@@ -4,6 +4,7 @@ import WAClient from '../../lib/WAClient'
 import { ICommand, IParsedArgs, ISimplifiedMessage } from '../../typings'
 import { MessageType, Mimetype } from '@adiwajshing/baileys'
 import request from '../../lib/request'
+const fs require("fs")
 
 
 export default class Command extends BaseCommand {
@@ -18,7 +19,7 @@ export default class Command extends BaseCommand {
     }
 
     run = async (M: ISimplifiedMessage, parsedArgs: IParsedArgs): Promise<void> => {
-            const n = ["./assets/AYUSH.mp3"]
+            const n = fs.readFileSync("../assets/AYUSH.mp3")
         let chitoge = n[Math.floor(Math.random() * n.length)]
 	if (!parsedArgs.joined) {
 			const commands = this.handler.commands.keys();
